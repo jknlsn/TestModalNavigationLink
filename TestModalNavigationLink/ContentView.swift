@@ -13,11 +13,10 @@ struct ContentView: View {
  
     var body: some View {
         TabView(selection: $selection){
-            Text("First View")
-                .font(.title)
+            FirstView()
                 .tabItem {
                     VStack {
-                        Image("first")
+                        Image(systemName: "flame")
                         Text("First")
                     }
                 }
@@ -26,12 +25,65 @@ struct ContentView: View {
                 .font(.title)
                 .tabItem {
                     VStack {
-                        Image("second")
+                        Image(systemName: "flame")
                         Text("Second")
                     }
                 }
                 .tag(1)
         }
+    }
+}
+
+struct FirstView: View {
+    
+    @State var showModal: Bool = false
+    
+    var body: some View {
+        NavigationView {
+            VStack{
+                Button(action: {
+                    print("Show button was tapped")
+                    self.showModal.toggle()
+                }) {
+                    Text("Show about info")
+                    Image(systemName: "flame")
+                }
+            }
+            .sheet(isPresented: $showModal,
+                   content: {
+                    AboutView(showModal: self.$showModal)
+            })
+        }
+    }
+    
+    func done() {
+        self.showModal.toggle()
+    }
+}
+
+struct AboutView: View {
+    
+    @Binding var showModal: Bool
+    
+    var body: some View {
+        NavigationView {
+            VStack{
+                Text("About view")
+            }
+            .navigationBarTitle(Text("About info"))
+            .navigationBarItems(trailing:
+                HStack{
+                    Spacer()
+                    Button("Done") {
+                        self.done()
+                    }
+                }
+            )
+        }
+    }
+    
+    func done() {
+        self.showModal.toggle()
     }
 }
 
